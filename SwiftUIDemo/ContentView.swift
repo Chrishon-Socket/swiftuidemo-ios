@@ -14,6 +14,12 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             SwiftUICaptureDemoView()
+            .navigationBarItems(trailing:
+                NavigationLink(destination: CoreDataListView(),
+                               label: {
+                                Text("Menu")
+                })
+            )
         }
     }
 }
@@ -23,6 +29,106 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - CoreData
+
+struct CoreDataListView: View {
+    
+    @FetchRequest(entity: Customer.entity(), sortDescriptors: []) var customers: FetchedResults<Customer>
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @State private var refreshing = false
+    private var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
+    
+    var body: some View {
+        VStack {
+            List {
+                ForEach(customers, id: \.id) { customer in
+                    LocalStorageCell(customer: customer)
+                    // here is the listener for published context event
+                    .onReceive(self.didSave) { _ in
+                        print("customers after did save: \(self.customers)")
+                        print("previous customer: \(customer)")
+                        self.refreshing.toggle()
+                    }
+                }
+                .onDelete(perform: removeItem)
+            }
+        }
+        .navigationBarTitle(Text("Stored Customers"))
+        .navigationBarItems(trailing: EditButton())
+    }
+    
+    func removeItem(at offsets: IndexSet) {
+        for index in offsets {
+            let customer = customers[index]
+            self.managedObjectContext.delete(customer)
+        }
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Error deleting object from core data: \(error)")
+        }
+        
+    }
+}
+
+struct LocalStorageCell: View {
+    
+    @State var customer: Customer
+    
+    var body: some View {
+        HStack {
+            HStack {
+                CircleImageView(imageURL: "", imageFrameDimension: 60)
+                
+                VStack (alignment: .leading) {
+                    Text("Customer Unique ID:").font(.headline)
+                    Text(customer.id?.uuidString ?? "Unknown ID").font(.subheadline)
+                    
+                    Text("Date added:").font(.headline)
+                    Text("\(customer.dateAdded ?? Date())").font(.subheadline)
+                    
+                    Text("Number of visits:").font(.headline)
+                    Text("\(Int(customer.numVisits))").font(.subheadline)
+                    
+                    Text("Customer Name:").font(.headline)
+                    Text(customer.name ?? "Unknown Name")
+                        .lineLimit(nil)
+                        .font(.subheadline)
+                    
+                }.padding(.leading, 10)
+            }.padding(8)
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
+    }
+}
+
+struct CoreDataView_Previews: PreviewProvider {
+    static var previews: some View {
+        CoreDataListView()
+    }
+}
+
+
+
+
+
 
 
 
@@ -79,8 +185,8 @@ struct VerticalCaptureDevicesList: View {
 
                 NavigationLink(destination: CaptureHelperDeviceDetailView(deviceWrapper: deviceWrapper)) {
                     ConnectedDeviceVerticalCell(device: deviceWrapper.captureHelperDevice)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
                 }
 
             }
@@ -273,6 +379,20 @@ struct DecodedDataWrapper {
     mutating func update(decodedData: SKTCaptureDecodedData?, device: CaptureHelperDevice) {
         self.decodedData = decodedData
         self.device = device
+        
+        
+        if let dataAsString = decodedData?.stringFromDecodedData() {
+            guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
+                print("Unable to read managed object context.")
+                return
+            }
+            
+            if let existingCustomer = CoreDataHelper.getCustomer(with: dataAsString, context: context) {
+                CoreDataHelper.updateCustomer(existingCustomer, context: context)
+            } else {
+                CoreDataHelper.addCustomer(dataAsString, context: context)
+            }
+        }
     }
 }
 
