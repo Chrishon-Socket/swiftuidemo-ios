@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		524A00532448F03300B447D5 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524A00522448F03300B447D5 /* CoreDataHelper.swift */; };
 		5264A91D2440C088003A9E63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5264A91C2440C088003A9E63 /* AppDelegate.swift */; };
 		5264A91F2440C088003A9E63 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5264A91E2440C088003A9E63 /* SceneDelegate.swift */; };
 		5264A9222440C088003A9E63 /* SwiftUIDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5264A9202440C088003A9E63 /* SwiftUIDemo.xcdatamodeld */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		0C962BC7088D5A3CDFFB0102 /* Pods-SwiftUIDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUIDemoTests.release.xcconfig"; path = "Target Support Files/Pods-SwiftUIDemoTests/Pods-SwiftUIDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		1DB0755CB939AE21BF301FE0 /* Pods_SwiftUIDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUIDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		524A00522448F03300B447D5 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		5264A9192440C088003A9E63 /* SwiftUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5264A91C2440C088003A9E63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5264A91E2440C088003A9E63 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				5264A9202440C088003A9E63 /* SwiftUIDemo.xcdatamodeld */,
 				5264A9272440C08B003A9E63 /* Preview Content */,
 				5264A9412445FD7C003A9E63 /* SKTCaptureViewController.swift */,
+				524A00522448F03300B447D5 /* CoreDataHelper.swift */,
 			);
 			path = SwiftUIDemo;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				524A00532448F03300B447D5 /* CoreDataHelper.swift in Sources */,
 				5264A91D2440C088003A9E63 /* AppDelegate.swift in Sources */,
 				5264A9422445FD7C003A9E63 /* SKTCaptureViewController.swift in Sources */,
 				5264A9222440C088003A9E63 /* SwiftUIDemo.xcdatamodeld in Sources */,
